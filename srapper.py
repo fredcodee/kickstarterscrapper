@@ -1,0 +1,75 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from time import sleep
+from bs4 import BeautifulSoup as soup
+import pandas as pd
+
+
+options = Options()
+options.add_argument("--headless")
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-gpu')
+options.add_argument('start-maximized')
+options.add_argument('disable-infobars')
+options.add_argument("--disable-extensions")
+CHROMEDRIVER_PATH ="C:\\Users\\Windows 10 Pro\\Downloads\\chromedriver"
+browser = webdriver.Chrome(CHROMEDRIVER_PATH, options=options)
+
+category="art".lower() #put your category here <-----------------
+url ="https://www.kickstarter.com/discover/categories/"+category+"?ref=discovery_overlay"
+browser.get(url)
+sleep(3)
+
+def nav_to_category_selection():
+    #nav to most funded
+    bar= browser.find_element_by_id("sorts").click()
+    sleep(3)
+
+    m_funded = browser.find_element_by_link_text("Most Funded").click()
+    sleep(5)
+
+    #load all pages
+    '''load= browser.find_element_by_css_selector(".load_more.mt3").click()
+    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+'''
+
+def get_projects_links():
+    #get links to all projects on current page
+    projects= browser.find_elements_by_css_selector(".relative.self-start")
+    project_links=[]
+    for i in projects:
+        k = i.find_elements_by_tag_name("a")[0].get_attribute("href")
+        project_links.append(k)
+        sleep(2)
+    return(project_links)
+
+def get_data(link):
+    #to scrape the detials
+    browser.get(link)
+    sleep(5)
+    http_contents = soup(browser.page_source,"html.parser")
+    d={}
+    all= http_contents.find_all("div", class_= "row")[-1]
+    #title
+    d["title"] = all.find("h3", class_= "normal").text
+    #location
+    d["location"] = all.find_all("a")[1].text
+    #category
+    d["category"] = all.find_all("a")[-1].text
+    #pledged amount
+    d["pledged_amount"] = all.find("h3", class_="mb0").text
+    #pledge goal
+    d["pledge_goal"] = all.find_all("span", class_= "money")[-1].text
+    #backers
+    d["backers"] = all.find_all("h3", class_="mb0")[-1].text
+    sleep(2)
+
+    return(d)
+
+
+nav_to_category_selection()
+project_list=[]
+for i in get_projects_links():
+    project_list.append(get_data(i))
+    sleep(10)
+print(project_list)
