@@ -29,9 +29,9 @@ def nav_to_category_selection():
     sleep(5)
 
     #load all pages
-    '''load= browser.find_element_by_css_selector(".load_more.mt3").click()
-    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-'''
+    for i in range(10):
+        load= browser.find_element_by_css_selector(".load_more.mt3").click()
+        sleep(2)
 
 def get_projects_links():
     #get links to all projects on current page
