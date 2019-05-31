@@ -15,7 +15,7 @@ options.add_argument("--disable-extensions")
 CHROMEDRIVER_PATH ="C:\\Users\\Windows 10 Pro\\Downloads\\chromedriver"
 browser = webdriver.Chrome(CHROMEDRIVER_PATH, options=options)
 
-category="Comics".lower() #put your category here <-----------------
+category="TYPE YOUR CATEGORY HERE".lower() #put your category here <-----------------
 url ="https://www.kickstarter.com/discover/categories/"+category+"?ref=discovery_overlay"
 browser.get(url)
 sleep(3)
@@ -25,7 +25,7 @@ def nav_to_category_selection():
     bar= browser.find_element_by_id("sorts").click()
     sleep(3)
 
-    m_funded = browser.find_element_by_link_text("Most Funded").click()#put your preferred selection here<---------------
+    m_funded = browser.find_element_by_link_text("TYPE YOUR SELECTION HERE").click()#put your preferred selection here<---------------
     sleep(5)
 
     #load all pages
