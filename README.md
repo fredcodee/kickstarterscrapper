@@ -2,7 +2,7 @@
 scrape project details from kickstarter
 guide-
 choose your category and type in main code
-  Art
+  (Art
   Comics
   Crafts
   Dance
@@ -16,15 +16,15 @@ choose your category and type in main code
   Photography
   Publishing
   Technology
-  Theater
+  Theater)
 and then choose a selection and type in main code
-  Magic
+  {Magic
   Popularity
   Newest
   End Date
   Most Funded
   Most Backed
-  Near Me
+  Near Me)
   
   here is a sample 
   category- comics
