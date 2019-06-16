@@ -15,28 +15,33 @@ options.add_argument("--disable-extensions")
 CHROMEDRIVER_PATH ="C:\\Users\\Windows 10 Pro\\Downloads\\chromedriver"
 browser = webdriver.Chrome(CHROMEDRIVER_PATH, options=options)
 
-category="TYPE YOUR CATEGORY HERE".lower() #put your category here <-----------------
+
+category="Comics".lower() #put your category here <-----------------
+selection = "Most Funded".title()#put your preferred selection here<---------------
 url ="https://www.kickstarter.com/discover/categories/"+category+"?ref=discovery_overlay"
+
 browser.get(url)
 sleep(3)
 
 def nav_to_category_selection():
-    #nav to most funded
-    bar= browser.find_element_by_id("sorts").click()
+    #nav to selection
+    browser.find_element_by_id("sorts").click()
     sleep(3)
 
-    m_funded = browser.find_element_by_link_text("TYPE YOUR SELECTION HERE").click()#put your preferred selection here<---------------
+    browser.find_element_by_link_text(selection).click()
     sleep(5)
 
-    #load all pages
-    for i in range(10):
-        load= browser.find_element_by_css_selector(".load_more.mt3").click()
+    #load pages
+    pages_to_scrape= 10 #<---- how many pages to scrape
+    for i in range(pages_to_scrape):
+        browser.find_element_by_css_selector(".load_more.mt3").click()
         sleep(2)
 
 def get_projects_links():
     #get links to all projects on current page
     projects= browser.find_elements_by_css_selector(".relative.self-start")
     project_links=[]
+
     for i in projects:
         k = i.find_elements_by_tag_name("a")[0].get_attribute("href")
         project_links.append(k)
@@ -44,11 +49,13 @@ def get_projects_links():
     return(project_links)
 
 def get_data(link):
-    #to scrape the detials
+    #to scrape the details
     browser.get(link)
     sleep(5)
+
     http_contents = soup(browser.page_source,"html.parser")
     d={}
+    
     all= http_contents.find_all("div", class_= "row")[-1]
     #title
     try:
@@ -92,5 +99,5 @@ for i in get_projects_links():
 
 #save to csv file
 df= pd.DataFrame(project_list)
-df.to_csv("projects in %s.csv" %(category))
+df.to_csv("%s projects in %s.csv" %(selection,category))
 browser.quit()
